@@ -1,0 +1,415 @@
+{% load static %}
+<!-- Testimonials Carousel with 3D Cards -->
+<section id="testimonios" class="py-20 bg-pg-dark relative overflow-hidden">
+    <!-- Background decoration -->
+    <div class="absolute top-0 left-0 w-full h-full pointer-events-none">
+        <div class="absolute top-1/4 left-1/4 w-80 h-80 bg-pg-orange/5 rounded-full blur-[100px]"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-[120px]"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <div data-scroll-reveal class="text-center mb-16">
+            <h2 class="text-5xl font-black mb-4 section-title-wave">
+                <span class="text-white">Lo que dicen</span> <span class="text-pg-orange">nuestros socios</span>
+            </h2>
+            <p class="text-gray-400 text-lg mt-6">Historias reales de transformación</p>
+        </div>
+        
+        <!-- Carousel Outer Container (arrows and dots outside glow) -->
+        <div class="relative max-w-5xl mx-auto" data-scroll-reveal>
+            
+            <!-- Inner Carousel with Glow Effect (only this part has glow) -->
+            <div class="relative mx-12 md:mx-14">
+                <!-- Particles Canvas (behind carousel) -->
+                <canvas id="testimonial-particles" class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
+                
+                <!-- Pulsating Glow Border -->
+                <div class="absolute -inset-2 bg-gradient-to-r from-pg-orange/30 via-amber-500/20 to-pg-orange/30 rounded-3xl blur-md testimonial-glow"></div>
+                
+                <!-- Carousel Track with rounded borders -->
+                <div class="testimonial-carousel overflow-hidden py-6 px-2 bg-pg-dark/90 rounded-2xl border border-pg-orange/30 relative backdrop-blur-sm z-10">
+                    <div class="testimonial-track flex transition-transform duration-500 ease-out" id="testimonial-track">
+                    
+                    <!-- Card 1 -->
+                    <div class="testimonial-card flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-3">
+                        <div class="card-3d h-full">
+                            <div class="card-3d-inner glass-stronger rounded-2xl p-6 h-full relative">
+                                <div class="absolute -top-2 left-2 text-pg-orange/20 text-6xl font-serif leading-none">"</div>
+                                <div class="relative z-10 pt-4">
+                                    <p class="text-gray-300 leading-relaxed mb-6 italic text-sm">
+                                        "Llegué sin saber nada y los profes me ayudaron desde el primer día. En 6 meses bajé 15kg y ahora no puedo parar."
+                                    </p>
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-full bg-gradient-orange flex items-center justify-center text-white font-bold text-lg">M</div>
+                                        <div>
+                                            <h4 class="font-bold text-white">Martín L.</h4>
+                                            <p class="text-pg-orange text-xs">Socio hace 1 año</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-1 mt-3">
+                                        {% for i in "12345" %}<svg class="w-4 h-4 text-pg-orange" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>{% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 2 -->
+                    <div class="testimonial-card flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-3">
+                        <div class="card-3d h-full">
+                            <div class="card-3d-inner glass-stronger rounded-2xl p-6 h-full relative">
+                                <div class="absolute -top-2 left-2 text-pg-orange/20 text-6xl font-serif leading-none">"</div>
+                                <div class="relative z-10 pt-4">
+                                    <p class="text-gray-300 leading-relaxed mb-6 italic text-sm">
+                                        "El ambiente es increíble. Te sentís en familia. Los equipos están siempre impecables."
+                                    </p>
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-full bg-gradient-orange flex items-center justify-center text-white font-bold text-lg">S</div>
+                                        <div>
+                                            <h4 class="font-bold text-white">Sofía R.</h4>
+                                            <p class="text-pg-orange text-xs">Socia hace 2 años</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-1 mt-3">
+                                        {% for i in "12345" %}<svg class="w-4 h-4 text-pg-orange" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>{% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 3 -->
+                    <div class="testimonial-card flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-3">
+                        <div class="card-3d h-full">
+                            <div class="card-3d-inner glass-stronger rounded-2xl p-6 h-full relative">
+                                <div class="absolute -top-2 left-2 text-pg-orange/20 text-6xl font-serif leading-none">"</div>
+                                <div class="relative z-10 pt-4">
+                                    <p class="text-gray-300 leading-relaxed mb-6 italic text-sm">
+                                        "Después de probar varios gyms del barrio, encontré mi lugar. Los horarios flexibles son geniales."
+                                    </p>
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-full bg-gradient-orange flex items-center justify-center text-white font-bold text-lg">J</div>
+                                        <div>
+                                            <h4 class="font-bold text-white">Juan P.</h4>
+                                            <p class="text-pg-orange text-xs">Socio hace 8 meses</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-1 mt-3">
+                                        {% for i in "12345" %}<svg class="w-4 h-4 text-pg-orange" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>{% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 4 -->
+                    <div class="testimonial-card flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-3">
+                        <div class="card-3d h-full">
+                            <div class="card-3d-inner glass-stronger rounded-2xl p-6 h-full relative">
+                                <div class="absolute -top-2 left-2 text-pg-orange/20 text-6xl font-serif leading-none">"</div>
+                                <div class="relative z-10 pt-4">
+                                    <p class="text-gray-300 leading-relaxed mb-6 italic text-sm">
+                                        "Lo mejor es la variedad de máquinas y que nunca están ocupadas todas. Siempre puedo hacer mi rutina completa."
+                                    </p>
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-full bg-gradient-orange flex items-center justify-center text-white font-bold text-lg">L</div>
+                                        <div>
+                                            <h4 class="font-bold text-white">Laura M.</h4>
+                                            <p class="text-pg-orange text-xs">Socia hace 3 años</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-1 mt-3">
+                                        {% for i in "12345" %}<svg class="w-4 h-4 text-pg-orange" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>{% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 5 -->
+                    <div class="testimonial-card flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-3">
+                        <div class="card-3d h-full">
+                            <div class="card-3d-inner glass-stronger rounded-2xl p-6 h-full relative">
+                                <div class="absolute -top-2 left-2 text-pg-orange/20 text-6xl font-serif leading-none">"</div>
+                                <div class="relative z-10 pt-4">
+                                    <p class="text-gray-300 leading-relaxed mb-6 italic text-sm">
+                                        "Vine por recomendación de un amigo y no me arrepiento. El equipo humano es espectacular."
+                                    </p>
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-full bg-gradient-orange flex items-center justify-center text-white font-bold text-lg">C</div>
+                                        <div>
+                                            <h4 class="font-bold text-white">Carlos D.</h4>
+                                            <p class="text-pg-orange text-xs">Socio hace 6 meses</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-1 mt-3">
+                                        {% for i in "12345" %}<svg class="w-4 h-4 text-pg-orange" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>{% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 6 -->
+                    <div class="testimonial-card flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-3">
+                        <div class="card-3d h-full">
+                            <div class="card-3d-inner glass-stronger rounded-2xl p-6 h-full relative">
+                                <div class="absolute -top-2 left-2 text-pg-orange/20 text-6xl font-serif leading-none">"</div>
+                                <div class="relative z-10 pt-4">
+                                    <p class="text-gray-300 leading-relaxed mb-6 italic text-sm">
+                                        "Entreno hace 4 años y sigo igual de motivado. El gym es mi segunda casa."
+                                    </p>
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-full bg-gradient-orange flex items-center justify-center text-white font-bold text-lg">F</div>
+                                        <div>
+                                            <h4 class="font-bold text-white">Federico A.</h4>
+                                            <p class="text-pg-orange text-xs">Socio hace 4 años</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-1 mt-3">
+                                        {% for i in "12345" %}<svg class="w-4 h-4 text-pg-orange" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>{% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                </div>
+            </div>
+            
+            <!-- Navigation Arrows (OUTSIDE the glow container) -->
+            <button id="testimonial-prev" class="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-pg-dark border border-pg-orange/30 text-white flex items-center justify-center hover:bg-pg-orange hover:border-pg-orange transition-all z-20 shadow-lg">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button id="testimonial-next" class="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-pg-dark border border-pg-orange/30 text-white flex items-center justify-center hover:bg-pg-orange hover:border-pg-orange transition-all z-20 shadow-lg">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+            
+            <!-- Dots Indicator (OUTSIDE the glow container) -->
+            <div class="flex justify-center gap-3 mt-8" id="testimonial-dots"></div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Pulsating glow animation */
+@keyframes testimonialGlow {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.02); }
+}
+.testimonial-glow {
+    animation: testimonialGlow 3s ease-in-out infinite;
+}
+</style>
+
+<!-- Rising Particles Script -->
+<script>
+(function() {
+    const canvas = document.getElementById('testimonial-particles');
+    if (!canvas) return;
+    
+    const section = document.getElementById('testimonios');
+    const ctx = canvas.getContext('2d');
+    const particles = [];
+    const maxParticles = 30;
+    
+    function resizeCanvas() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height + 200; // Extend upward
+        canvas.style.height = (rect.height + 200) + 'px';
+        canvas.style.top = '-200px';
+    }
+    
+    class Particle {
+        constructor() {
+            this.reset();
+        }
+        
+        reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = canvas.height - 20; // Start at bottom (near glow)
+            this.size = Math.random() * 3 + 1;
+            this.speedY = Math.random() * 1.5 + 0.5;
+            this.speedX = (Math.random() - 0.5) * 0.5;
+            this.opacity = Math.random() * 0.6 + 0.3;
+            this.color = Math.random() > 0.5 ? '#F97316' : '#F59E0B';
+        }
+        
+        update() {
+            this.y -= this.speedY;
+            this.x += this.speedX;
+            
+            // Fade out as it rises (faster fade near top)
+            const fadePoint = canvas.height * 0.3;
+            if (this.y < fadePoint) {
+                this.opacity -= 0.02;
+            }
+            
+            // Reset if faded or off screen
+            if (this.opacity <= 0 || this.y < 0) {
+                this.reset();
+            }
+        }
+        
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.globalAlpha = this.opacity;
+            ctx.fill();
+            ctx.globalAlpha = 1;
+        }
+    }
+    
+    function init() {
+        resizeCanvas();
+        for (let i = 0; i < maxParticles; i++) {
+            const p = new Particle();
+            p.y = Math.random() * canvas.height; // Random starting position
+            particles.push(p);
+        }
+    }
+    
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+        
+        requestAnimationFrame(animate);
+    }
+    
+    // Only run if section is visible
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                init();
+                animate();
+                observer.disconnect();
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    if (section) observer.observe(section);
+    
+    window.addEventListener('resize', resizeCanvas);
+})();
+</script>
+
+<script>
+(function() {
+    const track = document.getElementById('testimonial-track');
+    const prevBtn = document.getElementById('testimonial-prev');
+    const nextBtn = document.getElementById('testimonial-next');
+    const dotsContainer = document.getElementById('testimonial-dots');
+    
+    if (!track || !dotsContainer) return;
+    
+    let currentPage = 0;
+    let cardsPerView = 3;
+    const totalCards = track.children.length;
+    
+    function updateCardsPerView() {
+        if (window.innerWidth < 768) cardsPerView = 1;
+        else if (window.innerWidth < 1024) cardsPerView = 2;
+        else cardsPerView = 3;
+    }
+    
+    function getTotalPages() {
+        return Math.ceil(totalCards / cardsPerView);
+    }
+    
+    function createDots() {
+        const totalPages = getTotalPages();
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < totalPages; i++) {
+            const dot = document.createElement('button');
+            dot.className = `testimonial-dot w-3 h-3 rounded-full transition-all ${i === currentPage ? 'bg-pg-orange w-8' : 'bg-gray-600 hover:bg-gray-500'}`;
+            dot.dataset.page = i;
+            dot.addEventListener('click', () => goToPage(i));
+            dotsContainer.appendChild(dot);
+        }
+    }
+    
+    function updateDots() {
+        const dots = dotsContainer.querySelectorAll('.testimonial-dot');
+        dots.forEach((dot, i) => {
+            if (i === currentPage) {
+                dot.classList.remove('bg-gray-600', 'hover:bg-gray-500');
+                dot.classList.add('bg-pg-orange', 'w-8');
+            } else {
+                dot.classList.remove('bg-pg-orange', 'w-8');
+                dot.classList.add('bg-gray-600', 'hover:bg-gray-500');
+            }
+        });
+    }
+    
+    function updateCarousel() {
+        const offset = currentPage * cardsPerView * (100 / cardsPerView);
+        track.style.transform = `translateX(-${offset}%)`;
+        updateDots();
+    }
+    
+    function goToPage(page) {
+        const maxPage = getTotalPages() - 1;
+        currentPage = Math.max(0, Math.min(page, maxPage));
+        updateCarousel();
+    }
+    
+    function next() {
+        if (currentPage >= getTotalPages() - 1) {
+            currentPage = 0;
+        } else {
+            currentPage++;
+        }
+        updateCarousel();
+    }
+    
+    function prev() {
+        if (currentPage <= 0) {
+            currentPage = getTotalPages() - 1;
+        } else {
+            currentPage--;
+        }
+        updateCarousel();
+    }
+    
+    prevBtn?.addEventListener('click', prev);
+    nextBtn?.addEventListener('click', next);
+    
+    window.addEventListener('resize', () => {
+        updateCardsPerView();
+        currentPage = Math.min(currentPage, getTotalPages() - 1);
+        createDots();
+        updateCarousel();
+    });
+    
+    // Touch swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    track.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    track.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        if (touchStartX - touchEndX > 50) next();
+        if (touchEndX - touchStartX > 50) prev();
+    });
+    
+    // Auto-play
+    let autoPlay = setInterval(next, 5000);
+    track.parentElement.addEventListener('mouseenter', () => clearInterval(autoPlay));
+    track.parentElement.addEventListener('mouseleave', () => autoPlay = setInterval(next, 5000));
+    
+    // Initialize
+    updateCardsPerView();
+    createDots();
+    updateCarousel();
+})();
+</script>

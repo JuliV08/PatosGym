@@ -1,0 +1,114 @@
+{% extends "landing/base.html" %}
+
+{% block title %}Galería - PowerGYM{% endblock %}
+
+{% block content %}
+<!-- Navigation -->
+<nav class="fixed top-0 w-full z-50 glass border-b border-gray-800">
+    <div class="container mx-auto px-4 py-4">
+        <div class="flex items-center justify-between">
+            <a href="/" class="text-2xl font-bold">
+                <span class="text-white">POWER</span><span class="text-pg-red">GYM</span>
+            </a>
+            <a href="/" class="text-gray-300 hover:text-white transition">← Volver al inicio</a>
+        </div>
+    </div>
+</nav>
+
+<div class="pt-24 pb-20 bg-gradient-dark min-h-screen">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-black mb-4">
+                <span class="text-white">Galería</span> <span class="text-pg-red">Completa</span>
+            </h1>
+            <p class="text-gray-400 text-lg">Todas nuestras instalaciones</p>
+        </div>
+        
+        <!-- Category filter -->
+        <div class="flex flex-wrap justify-center gap-3 mb-12" id="category-filter">
+            <button data-category="all" class="filter-btn active px-6 py-3 rounded-lg font-semibold transition-all bg-pg-red text-white">
+                Todas
+            </button>
+            {% for key, value in categories.items %}
+            <button data-category="{{ key }}" class="filter-btn px-6 py-3 rounded-lg font-semibold transition-all border border-gray-700 text-gray-300 hover:border-pg-red hover:text-white">
+                {{ value }}
+            </button>
+            {% endfor %}
+        </div>
+        
+        <!-- Gallery grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="gallery-grid">
+            {% for photo in photos %}
+            <div class="gallery-item hover-glow rounded-lg overflow-hidden border border-gray-800" data-category="{{ photo.category }}">
+                <a href="{{ photo.image.url }}" class="glightbox" data-gallery="gallery">
+                    <div class="relative aspect-[4/3] overflow-hidden group">
+                        <img 
+                            src="{% if photo.thumbnail %}{{ photo.thumbnail.url }}{% else %}{{ photo.image.url }}{% endif %}" 
+                            alt="PowerGYM"
+                            loading="lazy"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        >
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center text-gray-500 py-20">
+                <p class="text-xl">No hay fotos disponibles en este momento</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-pg-black border-t border-gray-800 py-8">
+    <div class="container mx-auto px-4 text-center text-gray-500">
+        <p>&copy; 2025 PowerGYM. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Category filter functionality
+const filterButtons = document.querySelectorAll('.filter-btn');
+const galleryItems = document.querySelectorAll('.gallery-item');
+
+filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const category = btn.dataset.category;
+        
+        // Update active button
+        filterButtons.forEach(b => {
+            b.classList.remove('active', 'bg-pg-red', 'text-white');
+            b.classList.add('border', 'border-gray-700', 'text-gray-300');
+        });
+        btn.classList.add('active', 'bg-pg-red', 'text-white');
+        btn.classList.remove('border', 'border-gray-700', 'text-gray-300');
+        
+        // Filter gallery items
+        galleryItems.forEach(item => {
+            if (category === 'all' || item.dataset.category === category) {
+                item.style.display = 'block';
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'scale(1)';
+                }, 10);
+            } else {
+                item.style.opacity = '0';
+                item.style.transform = 'scale(0.9)';
+                setTimeout(() => {
+                    item.style.display = 'none';
+                }, 300);
+            }
+        });
+    });
+});
+
+// Add transition styles
+galleryItems.forEach(item => {
+    item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+});
+</script>
+{% endblock %}

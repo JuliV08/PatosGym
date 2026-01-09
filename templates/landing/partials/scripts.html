@@ -1,0 +1,150 @@
+<!-- Scripts partial -->
+<script>
+// Mobile Menu Toggle
+(function() {
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileDrawer = document.getElementById('mobile-drawer');
+    const menuOverlay = document.getElementById('menu-overlay');
+    const menuOpenIcon = document.getElementById('menu-icon-open');
+    const menuCloseIcon = document.getElementById('menu-icon-close');
+    const body = document.body;
+
+    function toggleMenu() {
+        const isOpen = !mobileDrawer.classList.contains('translate-x-full');
+        
+        if (isOpen) {
+            mobileDrawer.classList.add('translate-x-full');
+            menuOverlay.classList.remove('opacity-100');
+            menuOverlay.classList.add('opacity-0', 'pointer-events-none');
+            menuOpenIcon.classList.remove('hidden');
+            menuCloseIcon.classList.add('hidden');
+            body.classList.remove('menu-open');
+        } else {
+            mobileDrawer.classList.remove('translate-x-full');
+            menuOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            menuOverlay.classList.add('opacity-100');
+            menuOpenIcon.classList.add('hidden');
+            menuCloseIcon.classList.remove('hidden');
+            body.classList.add('menu-open');
+        }
+    }
+
+    if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
+    if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
+
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            if (!mobileDrawer.classList.contains('translate-x-full')) toggleMenu();
+        });
+    });
+})();
+
+// Animation delays
+document.querySelectorAll('[data-animate]').forEach((el, index) => {
+    el.style.animationDelay = (index * 50) + 'ms';
+});
+
+// Contact Form Handler
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nombre = this.nombre.value;
+            const email = this.email.value;
+            const mensaje = this.mensaje.value;
+            
+            const phoneNumber = "5491144751450";
+            const text = `Hola PatosGym! Mi nombre es ${nombre} (${email}). ${mensaje}`;
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(text)}`;
+            
+            const btn = this.querySelector('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="relative z-10">Abriendo WhatsApp...</span><div class="absolute inset-0 bg-green-500"></div>';
+            
+            setTimeout(() => {
+                window.open(whatsappUrl, '_blank');
+                btn.innerHTML = originalText;
+                this.reset();
+            }, 500);
+        });
+    }
+
+    // Ver Más Logic
+    function setupLoadMore(buttonId, gridId, itemClass) {
+        const btn = document.getElementById(buttonId);
+        const grid = document.getElementById(gridId);
+        if (!btn || !grid) return;
+
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const span = btn.querySelector('span');
+            const svg = btn.querySelector('svg');
+            const isVisible = btn.getAttribute('data-visible') === 'true';
+            const textMore = btn.getAttribute('data-text-more');
+            const textLess = btn.getAttribute('data-text-less');
+
+            const items = grid.querySelectorAll('.' + itemClass);
+            
+            if (!isVisible) {
+                items.forEach(item => item.classList.add('show'));
+                btn.setAttribute('data-visible', 'true');
+                if (span) span.textContent = textLess;
+                if (svg) svg.classList.add('rotate-180');
+            } else {
+                items.forEach(item => item.classList.remove('show'));
+                btn.setAttribute('data-visible', 'false');
+                if (span) span.textContent = textMore;
+                if (svg) svg.classList.remove('rotate-180');
+                grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    }
+
+    setupLoadMore('gallery-load-more', 'gallery-grid', 'hidden-mobile');
+    setupLoadMore('faqs-load-more', 'faqs-grid', 'hidden-mobile');
+});
+
+// FAQ Accordion
+document.querySelectorAll('.faq-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        const content = button.querySelector('.faq-content');
+        const icon = button.querySelector('.faq-icon');
+        
+        document.querySelectorAll('.faq-btn').forEach(otherBtn => {
+            if (otherBtn !== button) {
+                const otherContent = otherBtn.querySelector('.faq-content');
+                const otherIcon = otherBtn.querySelector('.faq-icon');
+                
+                if (otherContent) {
+                    otherContent.classList.remove('grid-rows-[1fr]');
+                    otherContent.classList.add('grid-rows-[0fr]');
+                }
+                if (otherIcon) otherIcon.classList.remove('rotate-180');
+                
+                otherBtn.classList.remove('border-pg-orange/50', 'bg-white/10');
+                otherBtn.classList.add('border-white/5', 'bg-white/5');
+            }
+        });
+        
+        const isOpen = content && content.classList.contains('grid-rows-[1fr]');
+        
+        if (isOpen) {
+            content.classList.remove('grid-rows-[1fr]');
+            content.classList.add('grid-rows-[0fr]');
+            if (icon) icon.classList.remove('rotate-180');
+            button.classList.remove('border-pg-orange/50', 'bg-white/10');
+            button.classList.add('border-white/5', 'bg-white/5');
+        } else {
+            if (content) {
+                content.classList.remove('grid-rows-[0fr]');
+                content.classList.add('grid-rows-[1fr]');
+            }
+            if (icon) icon.classList.add('rotate-180');
+            button.classList.remove('border-white/5', 'bg-white/5');
+            button.classList.add('border-pg-orange/50', 'bg-white/10');
+        }
+    });
+});
+</script>

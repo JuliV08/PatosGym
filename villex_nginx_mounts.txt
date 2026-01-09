@@ -1,0 +1,22 @@
+# Script para agregar bind mounts a villex_nginx
+# Este fragmento debe agregarse en /root/Villex/docker-compose.prod.yml
+# bajo el servicio 'nginx' → 'volumes'
+
+# EJEMPLO DE CÓMO DEBE VERSE:
+# services:
+#   nginx:
+#     ...otras configuraciones...
+#     volumes:
+#       ...volúmenes existentes (no modificar)...
+#       - /srv/powergym/volumes/static:/opt/powergym/static:ro
+#       - /srv/powergym/volumes/media:/opt/powergym/media:ro
+
+# PASOS:
+# 1. Editar: nano /root/Villex/docker-compose.prod.yml
+# 2. Agregar las 2 líneas de arriba en la sección volumes de nginx
+# 3. Reiniciar nginx: 
+#    cd /root/Villex
+#    docker compose -f docker-compose.prod.yml down nginx
+#    docker compose -f docker-compose.prod.yml up -d nginx
+# 4. Verificar mounts:
+#    docker inspect villex_nginx | grep powergym

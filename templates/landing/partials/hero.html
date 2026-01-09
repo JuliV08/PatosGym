@@ -1,0 +1,231 @@
+{% load static %}
+<!-- Hero Section - PatosGym Original Design -->
+<section id="hero-section" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    
+    <!-- Background Carousel -->
+    <div class="hero-bg-carousel">
+        {% for hero in hero_images %}
+        <div class="hero-slide {% if forloop.first %}active{% endif %}">
+            <img src="{{ hero.imagen.url }}" alt="{{ hero.titulo|default:'PatosGYM' }}" loading="eager">
+        </div>
+        {% empty %}
+        <div class="hero-slide active">
+            <img src="{% static 'images/hero/hero1.jpg' %}" alt="PatosGYM" loading="eager">
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Dark Overlay -->
+    <div class="hero-overlay"></div>
+    
+    <!-- Energy Waves Canvas - Original Effect -->
+    <canvas id="hero-waves"></canvas>
+    
+    <!-- Corner Glow Effects -->
+    <div class="hero-corner-glow hero-corner-glow-tl"></div>
+    <div class="hero-corner-glow hero-corner-glow-tr"></div>
+    
+    <!-- Content -->
+    <div class="hero-content-wrapper container mx-auto px-4 pt-24 pb-12 relative z-10 text-center flex flex-col items-center justify-center">
+        <div data-animate class="opacity-0">
+            <!-- Logo Grande as Hero Title - Floating Animation -->
+            <div class="hero-logo-float mb-6 mt-16 md:mt-0">
+                <img 
+                    src="{% static 'images/LogoGrande.png' %}" 
+                    alt="Pato's Gym" 
+                    class="w-72 sm:w-96 md:w-[26rem] lg:w-[32rem] mx-auto"
+                    style="filter: drop-shadow(0 0 50px rgba(249, 115, 22, 0.4)) drop-shadow(0 20px 40px rgba(0,0,0,0.5));"
+                >
+            </div>
+            
+            <div class="h-16 mb-8 flex items-center justify-center">
+                <p id="hero-phrase" class="hero-phrase active text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto font-semibold">
+                    Donde cada entrenamiento cuenta
+                </p>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#galeria" class="px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold rounded-lg hover:shadow-lg hover:shadow-orange-500/50 transition-all hover:scale-105">
+                    Conocé el Gym
+                </a>
+                <a href="#contacto" class="px-8 py-4 border-2 border-pg-orange text-white font-bold rounded-lg hover:bg-pg-orange/10 transition-all">
+                    Quiero Empezar
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+#hero-section { background-color: #0a0a0a; }
+
+.hero-bg-carousel { position: absolute; inset: 0; z-index: 1; }
+
+.hero-slide {
+    position: absolute; inset: 0; opacity: 0; transform: scale(1);
+    transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: opacity, transform;
+}
+.hero-slide.active { opacity: 1; animation: kenBurns 10s ease-out forwards; }
+.hero-slide.exiting { animation-play-state: paused !important; opacity: 0 !important; transition: opacity 1.5s; z-index: 10; }
+.hero-slide img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+
+@keyframes kenBurns { 0% { transform: scale(1); } 100% { transform: scale(1.08) translateX(-2%); } }
+.hero-slide:nth-child(even).active { animation: kenBurnsAlt 10s ease-out forwards; }
+@keyframes kenBurnsAlt { 0% { transform: scale(1); } 100% { transform: scale(1.08) translateX(2%); } }
+
+.hero-overlay {
+    position: absolute; inset: 0; z-index: 2;
+    background: linear-gradient(135deg, rgba(10, 10, 10, 0.85) 0%, rgba(26, 26, 26, 0.7) 50%, rgba(10, 10, 10, 0.85) 100%);
+}
+.hero-overlay::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+#hero-waves { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0.6; }
+
+/* Corner Glow Effects - Orange aurora */
+.hero-corner-glow {
+    position: absolute; width: 400px; height: 400px; z-index: 3; pointer-events: none;
+    filter: blur(80px); opacity: 0.4; animation: cornerPulse 4s ease-in-out infinite;
+}
+.hero-corner-glow-tl { top: -100px; left: -100px; background: radial-gradient(circle, rgba(249, 115, 22, 0.6) 0%, transparent 70%); }
+.hero-corner-glow-tr { top: -100px; right: -100px; background: radial-gradient(circle, rgba(245, 158, 11, 0.5) 0%, transparent 70%); animation-delay: 2s; }
+
+@keyframes cornerPulse { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.1); } }
+
+/* Floating animation for hero logo */
+@keyframes heroFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+.hero-logo-float {
+    animation: heroFloat 4s ease-in-out infinite;
+    will-change: transform;
+}
+
+.hero-content-wrapper { position: relative; z-index: 4; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+.hero-phrase { opacity: 0; transform: translateY(10px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.hero-phrase.active { opacity: 1; transform: translateY(0); }
+
+/* Nav buttons */
+.nav-premium-btn {
+    display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;
+    border-radius: 9999px; color: #d1d5db; font-weight: 600; font-size: 0.9rem;
+    transition: all 0.3s ease; border: 1px solid transparent;
+}
+.nav-premium-btn:hover { color: white; background: rgba(255, 255, 255, 0.05); border-color: rgba(249, 115, 22, 0.5); box-shadow: 0 0 15px rgba(249, 115, 22, 0.2); }
+.nav-premium-btn svg { transition: transform 0.3s ease, color 0.3s ease; }
+.nav-premium-btn:hover svg { color: #F97316; transform: scale(1.1); }
+
+.social-btn-premium {
+    display: flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem;
+    border-radius: 9999px; background: rgba(255, 255, 255, 0.05); color: #9ca3af;
+    border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease;
+}
+.social-btn-premium:hover { color: white; transform: translateY(-2px); border-color: transparent; }
+.social-btn-premium.instagram:hover { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); box-shadow: 0 4px 12px rgba(220, 39, 67, 0.3); }
+.social-btn-premium.whatsapp:hover { background: #25D366; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); }
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-slide, .hero-phrase { transition: none !important; animation: none !important; }
+    .hero-slide.active { animation: none; transform: none; }
+    #hero-waves, .hero-corner-glow { display: none; }
+}
+@media (max-width: 768px) {
+    #hero-section { min-height: 100svh; }
+    .hero-slide.active { animation-duration: 12s; }
+    .hero-corner-glow { width: 200px; height: 200px; }
+}
+</style>
+
+<script>
+(function() {
+    'use strict';
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    const phrases = [
+        'Donde cada entrenamiento cuenta',
+        'Tu evolución empieza acá',
+        'Más que un gym, tu segunda casa',
+        'Sumate a la comunidad Patos',
+        'Entrenar nunca fue tan cerca',
+        'Tu próximo nivel te espera'
+    ];
+    
+    let currentSlide = 0, currentPhrase = 0;
+    const slides = document.querySelectorAll('.hero-slide');
+    const phraseEl = document.getElementById('hero-phrase');
+    const canvas = document.getElementById('hero-waves');
+    const ctx = canvas ? canvas.getContext('2d') : null;
+    
+    function nextSlide() {
+        if (prefersReducedMotion || slides.length <= 1) return;
+        const activeSlide = slides[currentSlide];
+        activeSlide.classList.add('exiting');
+        phraseEl.classList.remove('active');
+        
+        setTimeout(() => activeSlide.classList.remove('active', 'exiting'), 1500);
+        
+        currentSlide = (currentSlide + 1) % slides.length;
+        currentPhrase = (currentPhrase + 1) % phrases.length;
+        
+        setTimeout(() => { phraseEl.textContent = phrases[currentPhrase]; phraseEl.classList.add('active'); }, 400);
+        slides[currentSlide].classList.add('active');
+    }
+    if (slides.length > 1) setInterval(nextSlide, 6000);
+    
+    // Energy Waves Effect - Original PatosGym design
+    if (!prefersReducedMotion && ctx) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        let waves = [];
+        const maxWaves = 5;
+        
+        class Wave {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = canvas.width / 2;
+                // Center waves slightly higher to align with logo (accounting for pt-24 padding)
+                this.y = canvas.height * 0.45;
+                this.radius = 0;
+                this.maxRadius = Math.max(canvas.width, canvas.height) * 0.8;
+                this.speed = 1 + Math.random() * 0.5;
+                this.opacity = 0.3;
+            }
+            update() {
+                this.radius += this.speed;
+                this.opacity = 0.3 * (1 - this.radius / this.maxRadius);
+                if (this.radius > this.maxRadius) this.reset();
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(249, 115, 22, ${this.opacity})`;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+        }
+        
+        for (let i = 0; i < maxWaves; i++) {
+            const w = new Wave();
+            w.radius = (i / maxWaves) * w.maxRadius;
+            waves.push(w);
+        }
+        
+        let lastTime = 0;
+        function animate(time) {
+            if (time - lastTime < 33) { requestAnimationFrame(animate); return; }
+            lastTime = time;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            waves.forEach(w => { w.update(); w.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate(0);
+        
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+    }
+})();
+</script>

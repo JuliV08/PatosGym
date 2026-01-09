@@ -1,0 +1,34 @@
+services:
+  web:
+    build: .
+    container_name: patosgym_prod_web
+    expose:
+      - "8000"
+    ports:
+      - "127.0.0.1:18082:8000"
+    volumes:
+      - /srv/patosgym/volumes/static:/app/staticfiles
+      - /srv/patosgym/volumes/media:/app/media
+    env_file:
+      - .env.prod
+    networks:
+      - patosgym_prod_net
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    container_name: patosgym_prod_db
+    volumes:
+      - /srv/patosgym/volumes/pgdata:/var/lib/postgresql/data
+    env_file:
+      - .env.prod.db
+    networks:
+      - patosgym_prod_net
+    restart: unless-stopped
+
+networks:
+  patosgym_prod_net:
+    name: patosgym_prod_net
+    driver: bridge
