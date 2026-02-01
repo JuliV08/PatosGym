@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 {% load static %}
-<html lang="es" class="scroll-smooth">
+<html lang="es" class="scroll-smooth overflow-x-hidden">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    
+
     <title>{% block title %}PatosGYM - Tu Gimnasio en Villa Lugano{% endblock %}</title>
-    <meta name="description" content="{% block description %}El gimnasio que siempre quisiste tener. Av. Larrazábal 3175, CABA. Tel 011 15-2395-4199{% endblock %}">
-    <meta name="keywords" content="patosgym, patos, gym, gimnasio, villa lugano, larrazabal, caba, entrenamiento, musculación, fitness">
-    
+    <meta name="description"
+        content="{% block description %}El gimnasio que siempre quisiste tener. Av. Larrazábal 3175, CABA. Tel 011 15-2395-4199{% endblock %}">
+    <meta name="keywords"
+        content="patosgym, patos, gym, gimnasio, villa lugano, larrazabal, caba, entrenamiento, musculación, fitness">
+
     <!-- Favicons -->
     <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
     <link rel="shortcut icon" type="image/png" href="{% static 'images/logo.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicons/icono32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicons/icono16.png' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicons/icono180.png' %}">
-    
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -37,27 +40,31 @@
             }
         }
     </script>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    
+
     <!-- GLightbox -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
-    
+
+    <!-- Swiper.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
     {% block extra_css %}{% endblock %}
-    
+
     <style>
         /* =====================================================
            PATOSGYM - PREMIUM EFFECTS STYLESHEET
            ===================================================== */
-        
+
         body {
             font-family: 'Inter', system-ui, sans-serif;
-            cursor: none; /* Hide default cursor for custom cursor */
+            cursor: none;
+            /* Hide default cursor for custom cursor */
         }
-        
+
         /* =====================================================
            1. CUSTOM CURSOR WITH TRAIL
            ===================================================== */
@@ -72,8 +79,10 @@
             transform: translate(-50%, -50%);
             transition: transform 0.1s ease, opacity 0.3s ease;
             box-shadow: 0 0 10px #F97316, 0 0 20px rgba(249, 115, 22, 0.5);
+            opacity: 0;
+            visibility: hidden;
         }
-        
+
         .cursor-ring {
             position: fixed;
             width: 35px;
@@ -84,29 +93,43 @@
             z-index: 9998;
             transform: translate(-50%, -50%);
             transition: all 0.15s ease-out;
+            opacity: 0;
+            visibility: hidden;
         }
-        
+
+        /* Hide custom cursor in team section to avoid Swiper conflicts */
+        #equipo .cursor-dot,
+        #equipo .cursor-ring {
+            display: none !important;
+        }
+
         .cursor-dot.clicking {
             transform: translate(-50%, -50%) scale(0.5);
         }
-        
+
         .cursor-ring.clicking {
             transform: translate(-50%, -50%) scale(1.5);
             border-color: #F97316;
         }
-        
+
         .cursor-ring.hovering {
             transform: translate(-50%, -50%) scale(1.8);
             background: rgba(249, 115, 22, 0.1);
             border-color: #F97316;
         }
-        
+
         /* Hide custom cursor on touch devices */
         @media (hover: none) and (pointer: coarse) {
-            body { cursor: auto; }
-            .cursor-dot, .cursor-ring { display: none !important; }
+            body {
+                cursor: auto;
+            }
+
+            .cursor-dot,
+            .cursor-ring {
+                display: none !important;
+            }
         }
-        
+
         /* =====================================================
            2. ENHANCED GLASSMORPHISM
            ===================================================== */
@@ -115,22 +138,22 @@
             backdrop-filter: blur(16px) saturate(180%);
             -webkit-backdrop-filter: blur(16px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.4),
                 inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
-        
+
         .glass-stronger {
             background: rgba(26, 26, 26, 0.8);
             backdrop-filter: blur(24px) saturate(200%);
             -webkit-backdrop-filter: blur(24px) saturate(200%);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.5),
                 inset 0 1px 0 rgba(255, 255, 255, 0.08),
                 inset 0 -1px 0 rgba(0, 0, 0, 0.2);
         }
-        
+
         /* =====================================================
            3. SCROLL "POWER WAVE" EFFECT
            ===================================================== */
@@ -138,20 +161,20 @@
             position: relative;
             opacity: 0;
             transform: translateY(40px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
-                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        
+
         [data-scroll-reveal].revealed {
             opacity: 1;
             transform: translateY(0);
         }
-        
+
         /* Power wave ONLY on section titles - not buttons/cards */
         .section-title-wave {
             position: relative;
         }
-        
+
         .section-title-wave::after {
             content: '';
             display: block;
@@ -162,11 +185,11 @@
             border-radius: 2px;
             transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
         }
-        
+
         .section-title-wave.revealed::after {
             width: 100px;
         }
-        
+
         /* =====================================================
            4. BUTTON RIPPLE EFFECT
            ===================================================== */
@@ -174,7 +197,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .btn-ripple .ripple {
             position: absolute;
             border-radius: 50%;
@@ -183,14 +206,14 @@
             animation: ripple-animation 0.6s ease-out forwards;
             pointer-events: none;
         }
-        
+
         @keyframes ripple-animation {
             to {
                 transform: scale(4);
                 opacity: 0;
             }
         }
-        
+
         /* =====================================================
            5. NAV LINKS ANIMATED UNDERLINE
            ===================================================== */
@@ -205,7 +228,7 @@
             font-size: 0.9rem;
             transition: color 0.3s ease;
         }
-        
+
         .nav-link-animated::after {
             content: '';
             position: absolute;
@@ -218,40 +241,40 @@
             transform: translateX(-50%);
             border-radius: 2px;
         }
-        
+
         .nav-link-animated:hover {
             color: #fff;
         }
-        
+
         .nav-link-animated:hover::after {
             width: 80%;
         }
-        
+
         .nav-link-animated:hover svg {
             color: #F97316;
             transform: scale(1.1);
         }
-        
+
         .nav-link-animated svg {
             transition: all 0.3s ease;
         }
-        
+
         /* =====================================================
            6. TESTIMONIAL CARDS 3D EFFECT (for future use)
            ===================================================== */
         .card-3d {
             perspective: 1000px;
         }
-        
+
         .card-3d-inner {
             transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
             transform-style: preserve-3d;
         }
-        
+
         .card-3d:hover .card-3d-inner {
             transform: rotateY(5deg) rotateX(5deg);
         }
-        
+
         .card-3d::before {
             content: '';
             position: absolute;
@@ -262,11 +285,11 @@
             transition: opacity 0.4s ease;
             z-index: -1;
         }
-        
+
         .card-3d:hover::before {
             opacity: 1;
         }
-        
+
         /* =====================================================
            7. GALLERY MASONRY LAYOUT
            ===================================================== */
@@ -276,20 +299,25 @@
             grid-auto-rows: 10px;
             gap: 16px;
         }
-        
+
         .masonry-item {
             grid-row-end: span var(--row-span, 20);
         }
-        
-        .masonry-item.tall { --row-span: 30; }
-        .masonry-item.short { --row-span: 18; }
-        
+
+        .masonry-item.tall {
+            --row-span: 30;
+        }
+
+        .masonry-item.short {
+            --row-span: 18;
+        }
+
         @media (min-width: 768px) {
             .masonry-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
-        
+
         /* =====================================================
            8. GALLERY FILTER TABS ANIMATION
            ===================================================== */
@@ -299,7 +327,7 @@
             gap: 0.5rem;
             position: relative;
         }
-        
+
         .filter-tab {
             padding: 0.5rem 1.25rem;
             border-radius: 9999px;
@@ -313,7 +341,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .filter-tab::before {
             content: '';
             position: absolute;
@@ -323,47 +351,54 @@
             transition: opacity 0.3s ease;
             z-index: -1;
         }
-        
+
         .filter-tab:hover {
             color: #fff;
             border-color: rgba(249, 115, 22, 0.5);
             transform: translateY(-2px);
         }
-        
+
         .filter-tab.active {
             color: #fff;
             border-color: #F97316;
             box-shadow: 0 0 20px rgba(249, 115, 22, 0.4);
         }
-        
+
         .filter-tab.active::before {
             opacity: 1;
         }
-        
+
         /* =====================================================
            STANDARD UTILITIES
            ===================================================== */
         .bg-gradient-dark {
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
         }
-        
+
         .bg-gradient-orange {
             background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
         }
-        
+
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         .animate-fade-in-up {
             animation: fadeInUp 0.6s ease-out forwards;
         }
-        
+
         .mobile-drawer {
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         body.menu-open {
             overflow: hidden;
         }
@@ -371,170 +406,247 @@
         .hover-glow {
             transition: all 0.3s ease;
         }
-        
+
         .hover-glow:hover {
             box-shadow: 0 0 30px rgba(249, 115, 22, 0.3);
             transform: translateY(-2px);
         }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-track { background: #0a0a0a; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 5px; border: 2px solid #0a0a0a; }
-        ::-webkit-scrollbar-thumb:hover { background: #F97316; }
-        
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 5px;
+            border: 2px solid #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #F97316;
+        }
+
         /* Reduced motion */
         @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
+
+            *,
+            *::before,
+            *::after {
                 animation-duration: 0.01ms !important;
                 transition-duration: 0.01ms !important;
             }
-            .cursor-dot, .cursor-ring { display: none !important; }
-            body { cursor: auto; }
+
+            .cursor-dot,
+            .cursor-ring {
+                display: none !important;
+            }
+
+            body {
+                cursor: auto;
+            }
         }
     </style>
 </head>
-<body class="bg-pg-black text-gray-100 antialiased">
-    
+
+<body class="bg-pg-black text-gray-100 antialiased overflow-x-hidden">
+
     <!-- Custom Cursor Elements -->
     <div class="cursor-dot" id="cursor-dot"></div>
     <div class="cursor-ring" id="cursor-ring"></div>
-    
+
     {% block content %}{% endblock %}
-    
+
     <!-- GLightbox JS -->
     <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
-    
+
+    <!-- Swiper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
     <script>
-        // =====================================================
-        // PREMIUM EFFECTS JAVASCRIPT
-        // =====================================================
-        
-        (function() {
-            'use strict';
-            
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            
-            // -------------------------------------------------
-            // 1. CUSTOM CURSOR - Only on devices with fine pointer (mouse/trackpad)
-            // -------------------------------------------------
-            const hasFineMouse = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-            if (!prefersReducedMotion && hasFineMouse) {
-                const dot = document.getElementById('cursor-dot');
-                const ring = document.getElementById('cursor-ring');
-                let mouseX = 0, mouseY = 0;
-                let ringX = 0, ringY = 0;
-                
-                document.addEventListener('mousemove', (e) => {
-                    mouseX = e.clientX;
-                    mouseY = e.clientY;
-                    dot.style.left = mouseX + 'px';
-                    dot.style.top = mouseY + 'px';
-                });
-                
-                function animateRing() {
-                    ringX += (mouseX - ringX) * 0.15;
-                    ringY += (mouseY - ringY) * 0.15;
-                    ring.style.left = ringX + 'px';
-                    ring.style.top = ringY + 'px';
-                    requestAnimationFrame(animateRing);
-                }
-                animateRing();
-                
-                document.addEventListener('mousedown', () => {
-                    dot.classList.add('clicking');
-                    ring.classList.add('clicking');
-                });
-                
-                document.addEventListener('mouseup', () => {
-                    dot.classList.remove('clicking');
-                    ring.classList.remove('clicking');
-                });
-                
-                // Hover effect on interactive elements
-                document.querySelectorAll('a, button, [role="button"], input, textarea, .hover-target').forEach(el => {
-                    el.addEventListener('mouseenter', () => ring.classList.add('hovering'));
-                    el.addEventListener('mouseleave', () => ring.classList.remove('hovering'));
-                });
-            }
-            
-            // -------------------------------------------------
-            // 2. SCROLL REVEAL WITH POWER WAVE
-            // -------------------------------------------------
-            const scrollRevealObserver = new IntersectionObserver((entries) => {
-                entries.forEach((entry, index) => {
-                    if (entry.isIntersecting) {
-                        setTimeout(() => {
-                            entry.target.classList.add('revealed');
-                        }, index * 100);
-                        scrollRevealObserver.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
-            
-            document.querySelectorAll('[data-scroll-reveal]').forEach(el => {
-                scrollRevealObserver.observe(el);
-            });
-            
-            // Also support old data-animate attribute
-            document.querySelectorAll('[data-animate]').forEach(el => {
-                scrollRevealObserver.observe(el);
-                el.setAttribute('data-scroll-reveal', '');
-            });
-            
-            // -------------------------------------------------
-            // 3. BUTTON RIPPLE EFFECT
-            // -------------------------------------------------
-            document.querySelectorAll('.btn-ripple, button[type="submit"], .bg-gradient-orange, .bg-pg-orange').forEach(btn => {
-                btn.classList.add('btn-ripple');
-                btn.addEventListener('click', function(e) {
-                    const rect = this.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    
-                    const ripple = document.createElement('span');
-                    ripple.className = 'ripple';
-                    ripple.style.left = x + 'px';
-                    ripple.style.top = y + 'px';
-                    ripple.style.width = ripple.style.height = Math.max(rect.width, rect.height) + 'px';
-                    ripple.style.marginLeft = -Math.max(rect.width, rect.height) / 2 + 'px';
-                    ripple.style.marginTop = -Math.max(rect.width, rect.height) / 2 + 'px';
-                    
-                    this.appendChild(ripple);
-                    setTimeout(() => ripple.remove(), 600);
-                });
-            });
-            
-            // -------------------------------------------------
-            // 4. GALLERY FILTER ANIMATION
-            // -------------------------------------------------
-            document.querySelectorAll('.filter-tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    const category = this.dataset.category;
-                    document.querySelectorAll('.gallery-item').forEach(item => {
-                        if (category === 'all' || item.dataset.category === category) {
-                            item.style.display = '';
-                            item.classList.add('revealed');
-                        } else {
-                            item.style.display = 'none';
+            // =====================================================
+            // PREMIUM EFFECTS JAVASCRIPT
+            // =====================================================
+
+            (function () {
+                'use strict';
+
+                const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+                // -------------------------------------------------
+                // 1. CUSTOM CURSOR - Only on devices with fine pointer (mouse/trackpad)
+                // -------------------------------------------------
+                const hasFineMouse = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+                if (!prefersReducedMotion && hasFineMouse) {
+                    const dot = document.getElementById('cursor-dot');
+                    const ring = document.getElementById('cursor-ring');
+                    let mouseX = 0, mouseY = 0;
+                    let ringX = 0, ringY = 0;
+                    let isVisible = false;
+
+                    // Show cursor on first move
+                    document.addEventListener('mousemove', (e) => {
+                        if (!isVisible) {
+                            dot.style.visibility = 'visible';
+                            ring.style.visibility = 'visible';
+                            dot.style.opacity = '1';
+                            ring.style.opacity = '1';
+                            isVisible = true;
+                        }
+                        mouseX = e.clientX;
+                        mouseY = e.clientY;
+                        dot.style.left = mouseX + 'px';
+                        dot.style.top = mouseY + 'px';
+                    });
+
+                    // Hide cursor when leaving window
+                    document.addEventListener('mouseleave', () => {
+                        dot.style.visibility = 'hidden';
+                        ring.style.visibility = 'hidden';
+                        dot.style.opacity = '0';
+                        ring.style.opacity = '0';
+                        isVisible = false;
+                    });
+
+                    // Show cursor when entering window
+                    document.addEventListener('mouseenter', () => {
+                        if (mouseX !== 0 || mouseY !== 0) {
+                            dot.style.visibility = 'visible';
+                            ring.style.visibility = 'visible';
+                            dot.style.opacity = '1';
+                            ring.style.opacity = '1';
+                            isVisible = true;
                         }
                     });
+
+                    function animateRing() {
+                        if (isVisible) {
+                            ringX += (mouseX - ringX) * 0.15;
+                            ringY += (mouseY - ringY) * 0.15;
+                            ring.style.left = ringX + 'px';
+                            ring.style.top = ringY + 'px';
+                        }
+                        requestAnimationFrame(animateRing);
+                    }
+                    animateRing();
+
+                    document.addEventListener('mousedown', () => {
+                        dot.classList.add('clicking');
+                        ring.classList.add('clicking');
+                    });
+
+                    document.addEventListener('mouseup', () => {
+                        dot.classList.remove('clicking');
+                        ring.classList.remove('clicking');
+                    });
+
+                    // Use event delegation for dynamic elements
+                    document.body.addEventListener('mouseenter', (e) => {
+                        const target = e.target;
+                        if (target.matches('a, button, [role="button"], input, textarea, .hover-target, .swiper-button-next, .swiper-button-prev')) {
+                            ring.classList.add('hovering');
+                        }
+                    }, true);
+
+                    document.body.addEventListener('mouseleave', (e) => {
+                        const target = e.target;
+                        if (target.matches('a, button, [role="button"], input, textarea, .hover-target, .swiper-button-next, .swiper-button-prev')) {
+                            ring.classList.remove('hovering');
+                        }
+                    }, true);
+                } else {
+                    // Hide cursor elements if not applicable
+                    const dot = document.getElementById('cursor-dot');
+                    const ring = document.getElementById('cursor-ring');
+                    if (dot) dot.style.display = 'none';
+                    if (ring) ring.style.display = 'none';
+                }
+
+                // -------------------------------------------------
+                // 2. SCROLL REVEAL WITH POWER WAVE
+                // -------------------------------------------------
+                const scrollRevealObserver = new IntersectionObserver((entries) => {
+                    entries.forEach((entry, index) => {
+                        if (entry.isIntersecting) {
+                            setTimeout(() => {
+                                entry.target.classList.add('revealed');
+                            }, index * 100);
+                            scrollRevealObserver.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
                 });
-            });
-            
-            // -------------------------------------------------
-            // GLightbox Init
-            // -------------------------------------------------
-            if (typeof GLightbox !== 'undefined') {
-                GLightbox({ touchNavigation: true, loop: true, autoplayVideos: true });
-            }
-            
-        })();
+
+                document.querySelectorAll('[data-scroll-reveal]').forEach(el => {
+                    scrollRevealObserver.observe(el);
+                });
+
+                // Also support old data-animate attribute
+                document.querySelectorAll('[data-animate]').forEach(el => {
+                    scrollRevealObserver.observe(el);
+                    el.setAttribute('data-scroll-reveal', '');
+                });
+
+                // -------------------------------------------------
+                // 3. BUTTON RIPPLE EFFECT
+                // -------------------------------------------------
+                document.querySelectorAll('.btn-ripple, button[type="submit"], .bg-gradient-orange, .bg-pg-orange').forEach(btn => {
+                    btn.classList.add('btn-ripple');
+                    btn.addEventListener('click', function (e) {
+                        const rect = this.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+
+                        const ripple = document.createElement('span');
+                        ripple.className = 'ripple';
+                        ripple.style.left = x + 'px';
+                        ripple.style.top = y + 'px';
+                        ripple.style.width = ripple.style.height = Math.max(rect.width, rect.height) + 'px';
+                        ripple.style.marginLeft = -Math.max(rect.width, rect.height) / 2 + 'px';
+                        ripple.style.marginTop = -Math.max(rect.width, rect.height) / 2 + 'px';
+
+                        this.appendChild(ripple);
+                        setTimeout(() => ripple.remove(), 600);
+                    });
+                });
+
+                // -------------------------------------------------
+                // 4. GALLERY FILTER ANIMATION
+                // -------------------------------------------------
+                document.querySelectorAll('.filter-tab').forEach(tab => {
+                    tab.addEventListener('click', function () {
+                        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+
+                        const category = this.dataset.category;
+                        document.querySelectorAll('.gallery-item').forEach(item => {
+                            if (category === 'all' || item.dataset.category === category) {
+                                item.style.display = '';
+                                item.classList.add('revealed');
+                            } else {
+                                item.style.display = 'none';
+                            }
+                        });
+                    });
+                });
+
+                // -------------------------------------------------
+                // GLightbox Init
+                // -------------------------------------------------
+                if (typeof GLightbox !== 'undefined') {
+                    GLightbox({ touchNavigation: true, loop: true, autoplayVideos: true });
+                }
+
+            })();
     </script>
-    
+
     {% block extra_js %}{% endblock %}
 </body>
+
 </html>

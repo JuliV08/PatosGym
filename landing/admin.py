@@ -5,17 +5,24 @@ from .models import TeamMember, HeroImage
 
 @admin.register(TeamMember)
 class TeamMemberAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'puesto', 'foto_preview', 'orden', 'activo')
+    list_display = ('nombre', 'puesto', 'puesto_secundario', 'foto_preview', 'tiene_video', 'orden', 'activo')
     list_editable = ('orden', 'activo')
     list_filter = ('puesto', 'activo')
     search_fields = ('nombre',)
     ordering = ('orden', 'nombre')
+    fields = ('nombre', 'puesto', 'puesto_secundario', 'foto', 'cv_info', 'video_url', 'orden', 'activo')
     
     def foto_preview(self, obj):
         if obj.foto:
             return format_html('<img src="{}" style="height: 40px; width: 40px; object-fit: cover; border-radius: 50%;" />', obj.foto.url)
         return "-"
     foto_preview.short_description = "Foto"
+    
+    def tiene_video(self, obj):
+        if obj.video_url:
+            return format_html('<span style="color: green;">✓ Tiene video</span>')
+        return format_html('<span style="color: gray;">-</span>')
+    tiene_video.short_description = "Video"
 
 
 @admin.register(HeroImage)
