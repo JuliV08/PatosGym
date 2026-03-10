@@ -50,8 +50,8 @@ class GalleryPhoto(models.Model):
     
     thumbnail = ImageSpecField(
         source='image',
-        processors=[Transpose(), ResizeToFill(400, 300)],
-        format='JPEG',
+        processors=[Transpose(), ResizeToFill(800, 600)],
+        format='WEBP',
         options={'quality': 85}
     )
     

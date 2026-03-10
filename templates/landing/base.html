@@ -625,14 +625,30 @@
                         this.classList.add('active');
 
                         const category = this.dataset.category;
+                        let visibleCount = 0;
+                        
                         document.querySelectorAll('.gallery-item').forEach(item => {
                             if (category === 'all' || item.dataset.category === category) {
                                 item.style.display = '';
                                 item.classList.add('revealed');
+                                visibleCount++;
                             } else {
                                 item.style.display = 'none';
                             }
                         });
+                        
+                        // Handle dynamic empty placeholder
+                        const emptyPlaceholder = document.getElementById('gallery-empty-placeholder');
+                        const emptyText = document.getElementById('empty-category-text');
+                        if (emptyPlaceholder && emptyText) {
+                            if (visibleCount === 0) {
+                                emptyPlaceholder.style.display = 'flex';
+                                const categoryName = this.textContent.trim().toLowerCase();
+                                emptyText.textContent = category === 'all' ? 'nuestras instalaciones' : categoryName;
+                            } else {
+                                emptyPlaceholder.style.display = 'none';
+                            }
+                        }
                     });
                 });
 

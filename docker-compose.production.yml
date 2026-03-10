@@ -1,0 +1,87 @@
+# ============================================================
+# PatosGym — Production Docker Compose
+# Isolation-first: EXCLUSIVE bind mounts, NO anonymous volumes
+#
+# Host bind mount layout (/var/www/patosgym_prod on VPS):
+#   pgdata/    → PostgreSQL data files
+#   static/    → Django collectstatic output (served by Nginx)
+#   media/     → User uploads (served by Nginx)
+#   logs/      → Gunicorn + app logs
+#
+# Port: 127.0.0.1:18083:8000 (different from legacy :18082)
+#       → no collision if old stack is still running during cutover
+#
+# Usage:
+#   docker compose -f docker-compose.production.yml up -d --build
+#   docker compose -f docker-compose.production.yml exec web python manage.py migrate
+#   docker compose -f docker-compose.production.yml exec web python manage.py collectstatic --noinput
+# ============================================================
+
+services:
+
+  # ── Django / Gunicorn application server
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: patosgym:production
+    container_name: patosgym_prod_web
+    restart: unless-stopped
+
+    expose:
+      - "8000"
+    # Only accessible from localhost — Nginx is the public entry point
+    ports:
+      - "127.0.0.1:18083:8000"
+
+    # ── BIND MOUNTS ONLY — no named/anonymous volumes
+    volumes:
+      - /var/www/patosgym_prod/static:/app/staticfiles
+      - /var/www/patosgym_prod/media:/app/media
+      - /var/www/patosgym_prod/logs:/app/logs
+
+    env_file:
+      - .env.prod
+
+    networks:
+      - patosgym_production_net
+
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+
+  # ── PostgreSQL 15 database
+  db:
+    image: postgres:15-alpine
+    container_name: patosgym_prod_db
+    restart: unless-stopped
+
+    # ── BIND MOUNT — data survives container rebuild/deletion
+    volumes:
+      - /var/www/patosgym_prod/pgdata:/var/lib/postgresql/data
+
+    env_file:
+      - .env.prod.db
+
+    # Healthcheck so 'web' waits until DB is ready before starting
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+    networks:
+      - patosgym_production_net
+
+networks:
+  patosgym_production_net:
+    name: patosgym_production_net
+    driver: bridge
+    # Custom IPAM to ensure subnet doesn't collide with other projects on VPS
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/24
+          gateway: 172.28.0.1
