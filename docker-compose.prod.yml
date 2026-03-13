@@ -1,34 +1,45 @@
 services:
-  web:
-    build: .
-    container_name: patosgym_prod_web
-    expose:
-      - "8000"
-    ports:
-      - "127.0.0.1:18082:8000"
-    volumes:
-      - /srv/patosgym/volumes/static:/app/staticfiles
-      - /srv/patosgym/volumes/media:/app/media
-    env_file:
-      - .env.prod
-    networks:
-      - patosgym_prod_net
-    depends_on:
-      - db
-    restart: unless-stopped
-
   db:
     image: postgres:15-alpine
     container_name: patosgym_prod_db
     volumes:
-      - /srv/patosgym/volumes/pgdata:/var/lib/postgresql/data
-    env_file:
-      - .env.prod.db
-    networks:
-      - patosgym_prod_net
+      - /srv/patosgym/volumes/db_data:/var/lib/postgresql/data:rw
+    environment:
+      - POSTGRES_DB=patosgym
+      - POSTGRES_USER=patos
+      - POSTGRES_PASSWORD=CHANGE_THIS_PASSWORD_IN_PRODUCTION
     restart: unless-stopped
+    networks:
+      - default
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: patosgym_prod_web
+    ports:
+      - "18082:8000"
+    volumes:
+      - /srv/patosgym/volumes/static:/app/staticfiles:rw
+      - /srv/patosgym/volumes/media:/app/media:rw
+    environment:
+      - DEBUG=0
+      - SECRET_KEY=CHANGE_THIS_SECRET_KEY_MINIMUM_50_CHARS
+      - DJANGO_SETTINGS_MODULE=patosgym_project.settings.production
+      - ALLOWED_HOSTS=localhost,patosgym.com.ar,www.patosgym.com.ar
+      - CSRF_TRUSTED_ORIGINS=https://patosgym.com.ar,https://www.patosgym.com.ar
+      - POSTGRES_DB=patosgym
+      - POSTGRES_USER=patos
+      - POSTGRES_PASSWORD=CHANGE_THIS_PASSWORD_IN_PRODUCTION
+      - DB_HOST=patosgym_prod_db
+      - DB_PORT=5432
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - default
 
 networks:
-  patosgym_prod_net:
-    name: patosgym_prod_net
-    driver: bridge
+  default:
+    external: true
+    name: villex_network

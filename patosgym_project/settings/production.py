@@ -25,10 +25,8 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
 
-# Database - override if using DATABASE_URL
-if config('DATABASE_URL', default=None):
-    import dj_database_url
-    DATABASES['default'] = dj_database_url.parse(config('DATABASE_URL'))
+# Database configuration is inherited from base.py
+# Uses individual env vars: POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD, DB_HOST, DB_PORT
 
 # Logging
 LOGGING = {
