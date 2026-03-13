@@ -1,0 +1,179 @@
+name: villex
+services:
+  backend:
+    build:
+      context: /root/Villex/backend
+      dockerfile: Dockerfile
+    container_name: villex_backend
+    depends_on:
+      db:
+        condition: service_healthy
+        required: true
+    environment:
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      CORS_ALLOWED_ORIGINS: http://localhost:5173,http://127.0.0.1:5173,https://villex.com.ar,https://www.villex.com.ar
+      CSRF_TRUSTED_ORIGINS: http://localhost:5173,http://127.0.0.1:5173,https://villex.com.ar,https://www.villex.com.ar
+      DEBUG: "True"
+      DEFAULT_FROM_EMAIL: VILLEX <villellijulian@gmail.com>
+      EMAIL_HOST: smtp.gmail.com
+      EMAIL_HOST_PASSWORD: ciqdnafjckunhqiy
+      EMAIL_HOST_USER: villellijulian@gmail.com
+      EMAIL_PORT: "587"
+      EMAIL_USE_TLS: "True"
+      IP_HASH_SECRET: villex-spam-secret-2024-random-string
+      POSTGRES_DB: villex_leads
+      POSTGRES_HOST: db
+      POSTGRES_PASSWORD: Manteca13467982
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: postgres
+      SECRET_KEY: django-insecure-local-dev-key
+      VITE_API_URL: https://villex.com.ar/api
+      VITE_FORMSPREE_URL: ""
+      VITE_WHATSAPP_NUMBER: "5491126960972"
+      WHATSAPP_PHONE: "5491126960972"
+      WHATSAPP_TEMPLATE: ¡Hola! Soy {name}. Me interesa {project_type}. {message}
+    networks:
+      villex_network: null
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: villex_static_files
+        target: /home/app/web/staticfiles
+        volume: {}
+  db:
+    container_name: villex_db
+    environment:
+      POSTGRES_DB: villex_leads
+      POSTGRES_PASSWORD: Manteca13467982
+      POSTGRES_USER: postgres
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U postgres -d villex_leads
+      timeout: 5s
+      interval: 10s
+      retries: 5
+    image: postgres:15-alpine
+    networks:
+      villex_network: null
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: villex_postgres_data
+        target: /var/lib/postgresql/data
+        volume: {}
+  nginx:
+    build:
+      context: /root/Villex
+      dockerfile: frontend.Dockerfile
+    container_name: villex_nginx
+    depends_on:
+      backend:
+        condition: service_started
+        required: true
+      patosgym_web:
+        condition: service_started
+        required: true
+    networks:
+      villex_network: null
+    ports:
+      - mode: ingress
+        target: 80
+        published: "80"
+        protocol: tcp
+      - mode: ingress
+        target: 443
+        published: "443"
+        protocol: tcp
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /root/Villex/nginx/conf.d
+        target: /etc/nginx/conf.d
+        read_only: true
+        bind: {}
+      - type: volume
+        source: villex_static_files
+        target: /usr/share/nginx/static
+        read_only: true
+        volume: {}
+      - type: bind
+        source: /etc/letsencrypt
+        target: /etc/letsencrypt
+        read_only: true
+        bind: {}
+      - type: volume
+        source: dym-cosmeticos_static_volume
+        target: /opt/dym-cosmeticos/staticfiles
+        read_only: true
+        volume: {}
+      - type: volume
+        source: dym-cosmeticos_media_volume
+        target: /opt/dym-cosmeticos/media
+        read_only: true
+        volume: {}
+      - type: bind
+        source: /srv/patosgym/volumes/static
+        target: /srv/patosgym/volumes/static
+        read_only: true
+        bind: {}
+      - type: bind
+        source: /srv/patosgym/volumes/media
+        target: /srv/patosgym/volumes/media
+        read_only: true
+        bind: {}
+  patosgym_db:
+    container_name: patosgym_prod_db
+    environment:
+      POSTGRES_DB: patosgym
+      POSTGRES_PASSWORD: patosgym_prod_pass_2024
+      POSTGRES_USER: patosgym_user
+    image: postgres:15-alpine
+    networks:
+      villex_network: null
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /srv/patosgym/volumes/db_data
+        target: /var/lib/postgresql/data
+        bind: {}
+  patosgym_web:
+    build:
+      context: /srv/patosgym
+      dockerfile: Dockerfile
+    container_name: patosgym_prod_web
+    depends_on:
+      patosgym_db:
+        condition: service_started
+        required: true
+    environment:
+      DATABASE_URL: postgres://patosgym_user:patosgym_prod_pass_2024@patosgym_db:5432/patosgym
+      DEBUG: "1"
+      SECRET_KEY: dummy_for_now_or_change_me
+    networks:
+      villex_network: null
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /srv/patosgym/volumes/static
+        target: /app/staticfiles
+        bind: {}
+      - type: bind
+        source: /srv/patosgym/volumes/media
+        target: /app/media
+        bind: {}
+networks:
+  villex_network:
+    name: villex_network
+    driver: bridge
+volumes:
+  dym-cosmeticos_media_volume:
+    name: dym-cosmeticos_media_volume
+    external: true
+  dym-cosmeticos_static_volume:
+    name: dym-cosmeticos_static_volume
+    external: true
+  villex_postgres_data:
+    name: villex_postgres_data
+  villex_static_files:
+    name: villex_static_files
