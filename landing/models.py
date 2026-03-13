@@ -38,11 +38,12 @@ class TeamMember(models.Model):
     )
     orden = models.PositiveIntegerField(_('Orden'), default=0, help_text=_('Número menor aparece primero'))
     activo = models.BooleanField(_('Activo'), default=True)
-    video_url = models.URLField(
-        _('Video de Entrevista (YouTube)'),
+    video_file = models.FileField(
+        _('Video de Entrevista (MP4)'),
+        upload_to='staff_videos/',
         blank=True,
         null=True,
-        help_text=_('URL del video de YouTube (puede ser privado o unlisted). Ejemplo: https://www.youtube.com/watch?v=...')
+        help_text=_('Archivo de video en formato .mp4 (Peso máximo recomendado: 30MB). Reemplaza al link de YouTube.')
     )
     
     class Meta:
@@ -58,29 +59,6 @@ class TeamMember(models.Model):
         if self.puesto_secundario:
             return f"{self.get_puesto_display()} / {self.get_puesto_secundario_display()}"
         return self.get_puesto_display()
-    
-    def get_youtube_embed_url(self):
-        """Convert YouTube URL to embed format for iframe"""
-        if not self.video_url:
-            return None
-        
-        import re
-        url = self.video_url
-        
-        # Extract video ID from various YouTube URL formats
-        patterns = [
-            r'(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)',
-            r'youtube\.com\/watch\?.*v=([^&\n?#]+)',
-        ]
-        
-        for pattern in patterns:
-            match = re.search(pattern, url)
-            if match:
-                video_id = match.group(1)
-                # Use youtube-nocookie.com for privacy
-                return f"https://www.youtube-nocookie.com/embed/{video_id}?rel=0&modestbranding=1"
-        
-        return None
 
 
 class HeroImage(models.Model):

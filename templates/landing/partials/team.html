@@ -81,7 +81,7 @@
                                         data-member-name="{{ member.nombre|escapejs }}"
                                         data-member-role="{{ member.get_full_role_display|escapejs }}"
                                         data-cv-info="{{ member.cv_info|escapejs }}"
-                                        data-video-url="{{ member.get_youtube_embed_url|default:'' }}"
+                                        data-video-file="{% if member.video_file %}{{ member.video_file.url|escapejs }}{% endif %}"
                                         aria-label="Ver detalles de {{ member.nombre }}"
                                         class="group/btn w-full py-3 px-5 bg-gradient-to-r from-pg-orange to-amber-500 hover:from-pg-orange hover:to-amber-600 text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-pg-orange/30 hover:shadow-pg-orange/50 hover:scale-105 active:scale-95">
                                         <!-- Eye icon for "Ver" -->
@@ -295,15 +295,15 @@
 
                 <!-- Video section -->
                 <div id="staffModalVideoSection">
-                    <!-- YouTube iframe — shown when video_url exists -->
-                    <div id="staffModalVideoWrap" class="relative w-full bg-black rounded-2xl overflow-hidden hidden" style="padding-bottom:56.25%;">
-                        <iframe id="staffModalIframe"
-                            class="absolute inset-0 w-full h-full"
-                            src=""
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
+                    <!-- Local Video HTML5 — shown when video_file exists -->
+                    <div id="staffModalVideoWrap" class="relative w-full bg-black rounded-2xl overflow-hidden hidden max-h-[60vh] flex items-center justify-center">
+                        <video id="staffModalVideo"
+                            class="w-full h-full max-h-[60vh] object-contain rounded-2xl"
+                            controls
+                            playsinline
+                            preload="metadata">
+                            Tu navegador no soporta la reproducción de videos.
+                        </video>
                     </div>
 
                     <!-- "Video en Producción" placeholder — shown when NO video -->
@@ -330,10 +330,15 @@
     // STAFF DETAIL MODAL — open / close
     // ============================================================
     function openStaffModal(btn) {
-        const name     = btn.dataset.memberName  || '';
-        const role     = btn.dataset.memberRole  || '';
-        const bio      = btn.dataset.cvInfo      || '';
-        const videoUrl = btn.dataset.videoUrl    || '';
+        const name      = btn.dataset.memberName  || '';
+        const role      = btn.dataset.memberRole  || '';
+        const bio       = btn.dataset.cvInfo      || '';
+        let videoFile   = btn.dataset.videoFile   || '';
+
+        // Django sometimes renders Python None as the string "None"
+        if (videoFile === 'None') {
+            videoFile = '';
+        }
 
         document.getElementById('staffModalTitle').textContent = name;
         document.getElementById('staffModalRole').textContent  = role;
@@ -341,18 +346,22 @@
 
         const videoWrap        = document.getElementById('staffModalVideoWrap');
         const videoPlaceholder = document.getElementById('staffModalVideoPlaceholder');
-        const iframe           = document.getElementById('staffModalIframe');
+        const videoPlayer      = document.getElementById('staffModalVideo');
 
-        if (videoUrl) {
-            // Add autoplay param
-            const finalUrl = videoUrl.includes('?')
-                ? videoUrl + '&autoplay=1'
-                : videoUrl + '?autoplay=1';
-            iframe.src = finalUrl;
+        if (videoFile) {
+            videoPlayer.src = videoFile;
             videoWrap.classList.remove('hidden');
             videoPlaceholder.classList.add('hidden');
+            
+            // Wait for modal to be visible then attempt autoplay
+            setTimeout(() => {
+                videoPlayer.play().catch(e => console.log('Autoplay prevented by browser', e));
+            }, 100);
+            
         } else {
-            iframe.src = '';
+            videoPlayer.pause();
+            videoPlayer.removeAttribute('src');
+            videoPlayer.load();
             videoWrap.classList.add('hidden');
             videoPlaceholder.classList.remove('hidden');
         }
@@ -364,12 +373,19 @@
     }
 
     function closeStaffModal() {
-        const modal  = document.getElementById('staffDetailModal');
-        const iframe = document.getElementById('staffModalIframe');
+        const modal       = document.getElementById('staffDetailModal');
+        const videoPlayer = document.getElementById('staffModalVideo');
 
         modal.classList.add('hidden');
         modal.classList.remove('flex');
-        iframe.src = '';
+        
+        // Stop video cleanly
+        if (videoPlayer) {
+            videoPlayer.pause();
+            videoPlayer.removeAttribute('src');
+            videoPlayer.load();
+        }
+        
         document.body.style.overflow = '';
     }
 

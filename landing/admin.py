@@ -10,7 +10,7 @@ class TeamMemberAdmin(admin.ModelAdmin):
     list_filter = ('puesto', 'activo')
     search_fields = ('nombre',)
     ordering = ('orden', 'nombre')
-    fields = ('nombre', 'puesto', 'puesto_secundario', 'foto', 'cv_info', 'video_url', 'orden', 'activo')
+    fields = ('nombre', 'puesto', 'puesto_secundario', 'foto', 'cv_info', 'video_file', 'orden', 'activo')
     
     def foto_preview(self, obj):
         if obj.foto:
@@ -19,7 +19,7 @@ class TeamMemberAdmin(admin.ModelAdmin):
     foto_preview.short_description = "Foto"
     
     def tiene_video(self, obj):
-        if obj.video_url:
+        if obj.video_file:
             return format_html('<span style="color: green;">✓ Tiene video</span>')
         return format_html('<span style="color: gray;">-</span>')
     tiene_video.short_description = "Video"

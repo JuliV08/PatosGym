@@ -33,7 +33,6 @@ class GalleryPhoto(models.Model):
     CATEGORY_CHOICES = [
         ('vestuarios', 'Vestuarios'),
         ('cardio', 'Cardio'),
-        ('elgym', 'El Gym'),
         ('musculacion', 'Musculación'),
         ('transformaciones', 'Antes y Después'),
         ('atletas', 'Nuestros Atletas'),
