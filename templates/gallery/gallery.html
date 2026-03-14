@@ -1,6 +1,6 @@
 {% extends "landing/base.html" %}
 
-{% block title %}Galería - PowerGYM{% endblock %}
+{% block title %}Galería - PatosGYM{% endblock %}
 
 {% block content %}
 <!-- Navigation -->
@@ -8,7 +8,7 @@
     <div class="container mx-auto px-4 py-4">
         <div class="flex items-center justify-between">
             <a href="/" class="text-2xl font-bold">
-                <span class="text-white">POWER</span><span class="text-pg-red">GYM</span>
+                <span class="text-white">PATOS</span><span class="text-pg-red">GYM</span>
             </a>
             <a href="/" class="text-gray-300 hover:text-white transition">← Volver al inicio</a>
         </div>
@@ -44,7 +44,7 @@
                     <div class="relative aspect-[4/3] overflow-hidden group">
                         <img 
                             src="{% if photo.thumbnail %}{{ photo.thumbnail.url }}{% else %}{{ photo.image.url }}{% endif %}" 
-                            alt="PowerGYM"
+                            alt="PatosGYM"
                             loading="lazy"
                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         >
@@ -63,7 +63,7 @@
 <!-- Footer -->
 <footer class="bg-pg-black border-t border-gray-800 py-8">
     <div class="container mx-auto px-4 text-center text-gray-500">
-        <p>&copy; 2025 PowerGYM. Todos los derechos reservados.</p>
+        <p>&copy; 2025 PatosGYM. Todos los derechos reservados.</p>
     </div>
 </footer>
 

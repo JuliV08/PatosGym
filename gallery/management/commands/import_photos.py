@@ -66,7 +66,7 @@ class Command(BaseCommand):
                 photo = GalleryPhoto(
                     title=title,
                     caption='',
-                    alt_text=f'{title} - PowerGYM',
+                    alt_text=f'{title} - PatosGYM',
                     category=category,
                     is_active=True,
                     sort_order=imported,
