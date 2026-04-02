@@ -1,4 +1,5 @@
 {% extends "landing/base.html" %}
+{% load static %}
 
 {% block title %}Galería - PatosGYM{% endblock %}
 
@@ -8,57 +9,86 @@
     <div class="container mx-auto px-4 py-4">
         <div class="flex items-center justify-between">
             <a href="/" class="text-2xl font-bold">
-                <span class="text-white">PATOS</span><span class="text-pg-red">GYM</span>
+                <span class="text-white">PATOS</span><span class="text-pg-orange">GYM</span>
             </a>
-            <a href="/" class="text-gray-300 hover:text-white transition">← Volver al inicio</a>
+            <a href="/" class="nav-link-animated text-gray-300 hover:text-white transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Volver al inicio
+            </a>
         </div>
     </div>
 </nav>
 
-<div class="pt-24 pb-20 bg-gradient-dark min-h-screen">
+<section class="pt-28 pb-20 bg-gradient-dark min-h-screen">
     <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h1 class="text-5xl font-black mb-4">
-                <span class="text-white">Galería</span> <span class="text-pg-red">Completa</span>
+
+        <div data-scroll-reveal class="text-center mb-12">
+            <h1 class="text-5xl font-black mb-4 section-title-wave">
+                <span class="text-white">Galería</span> <span class="text-pg-orange">Completa</span>
             </h1>
-            <p class="text-gray-400 text-lg">Todas nuestras instalaciones</p>
+            <p class="text-gray-400 text-lg mt-6">Todas nuestras instalaciones y atletas</p>
         </div>
-        
-        <!-- Category filter -->
-        <div class="flex flex-wrap justify-center gap-3 mb-12" id="category-filter">
-            <button data-category="all" class="filter-btn active px-6 py-3 rounded-lg font-semibold transition-all bg-pg-red text-white">
-                Todas
-            </button>
-            {% for key, value in categories.items %}
-            <button data-category="{{ key }}" class="filter-btn px-6 py-3 rounded-lg font-semibold transition-all border border-gray-700 text-gray-300 hover:border-pg-red hover:text-white">
-                {{ value }}
-            </button>
-            {% endfor %}
+
+        <!-- Filter Tabs -->
+        <div class="flex flex-wrap justify-center gap-3 mb-10" data-scroll-reveal>
+            <button class="filter-tab active" data-category="all">Todas</button>
+            <button class="filter-tab" data-category="musculacion">Musculación</button>
+            <button class="filter-tab" data-category="cardio">Cardio</button>
+            <button class="filter-tab" data-category="vestuarios">Vestuarios</button>
+            <button class="filter-tab" data-category="transformaciones">Transformaciones</button>
+            <button class="filter-tab" data-category="atletas">Nuestros Atletas</button>
         </div>
-        
-        <!-- Gallery grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="gallery-grid">
+
+        <!-- Gallery Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="gallery-grid">
             {% for photo in photos %}
-            <div class="gallery-item hover-glow rounded-lg overflow-hidden border border-gray-800" data-category="{{ photo.category }}">
-                <a href="{{ photo.image.url }}" class="glightbox" data-gallery="gallery">
+            <div data-scroll-reveal
+                 data-category="{{ photo.category }}"
+                 class="gallery-item overflow-hidden rounded-xl border border-gray-800 hover-glow">
+                <a href="{{ photo.image.url }}" class="glightbox block" data-gallery="gallery">
                     <div class="relative aspect-[4/3] overflow-hidden group">
-                        <img 
-                            src="{% if photo.thumbnail %}{{ photo.thumbnail.url }}{% else %}{{ photo.image.url }}{% endif %}" 
-                            alt="PatosGYM"
+                        <img
+                            src="{% if photo.thumbnail %}{{ photo.thumbnail.url }}{% else %}{{ photo.image.url }}{% endif %}"
+                            alt="{{ photo.alt_text|default:'PatosGYM' }}"
                             loading="lazy"
                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         >
+                        <!-- Hover Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-5">
+                            <span class="text-pg-orange text-sm font-bold uppercase tracking-wider">{{ photo.get_category_display }}</span>
+                        </div>
                     </div>
                 </a>
             </div>
-            {% empty %}
-            <div class="col-span-full text-center text-gray-500 py-20">
-                <p class="text-xl">No hay fotos disponibles en este momento</p>
-            </div>
             {% endfor %}
+
+            <!-- Empty placeholder -->
+            <div id="gallery-empty-placeholder" style="display: none;" class="col-span-full animate-fade-in-up bg-black/60 backdrop-blur-xl border border-white/20 shadow-2xl shadow-black/50 rounded-2xl py-24 flex flex-col items-center justify-center gap-5">
+                <div class="relative">
+                    <div class="absolute -inset-4 rounded-full bg-pg-orange/5 blur-2xl animate-pulse"></div>
+                    <div class="relative w-24 h-24 rounded-full bg-black/60 border border-white/10 flex items-center justify-center">
+                        <svg class="w-12 h-12 text-white/25" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+                            <circle cx="12" cy="13" r="4"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <p class="text-white/30 text-2xl font-black tracking-[0.25em] uppercase">Próximamente</p>
+                    <p class="text-white/15 text-xs tracking-[0.15em] uppercase mt-2">Fotos de <span id="empty-category-text">tus instalaciones</span></p>
+                </div>
+                <div class="w-24 h-px bg-gradient-to-r from-transparent via-pg-orange/30 to-transparent"></div>
+                <p class="text-gray-600 text-sm">El contenido estará disponible muy pronto</p>
+            </div>
+
+            {% if not photos %}
+            <script>document.getElementById('gallery-empty-placeholder').style.display = 'flex';</script>
+            {% endif %}
         </div>
     </div>
-</div>
+</section>
 
 <!-- Footer -->
 <footer class="bg-pg-black border-t border-gray-800 py-8">
@@ -66,49 +96,4 @@
         <p>&copy; 2025 PatosGYM. Todos los derechos reservados.</p>
     </div>
 </footer>
-
-{% endblock %}
-
-{% block extra_js %}
-<script>
-// Category filter functionality
-const filterButtons = document.querySelectorAll('.filter-btn');
-const galleryItems = document.querySelectorAll('.gallery-item');
-
-filterButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-        const category = btn.dataset.category;
-        
-        // Update active button
-        filterButtons.forEach(b => {
-            b.classList.remove('active', 'bg-pg-red', 'text-white');
-            b.classList.add('border', 'border-gray-700', 'text-gray-300');
-        });
-        btn.classList.add('active', 'bg-pg-red', 'text-white');
-        btn.classList.remove('border', 'border-gray-700', 'text-gray-300');
-        
-        // Filter gallery items
-        galleryItems.forEach(item => {
-            if (category === 'all' || item.dataset.category === category) {
-                item.style.display = 'block';
-                setTimeout(() => {
-                    item.style.opacity = '1';
-                    item.style.transform = 'scale(1)';
-                }, 10);
-            } else {
-                item.style.opacity = '0';
-                item.style.transform = 'scale(0.9)';
-                setTimeout(() => {
-                    item.style.display = 'none';
-                }, 300);
-            }
-        });
-    });
-});
-
-// Add transition styles
-galleryItems.forEach(item => {
-    item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-});
-</script>
 {% endblock %}
