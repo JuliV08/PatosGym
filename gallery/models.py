@@ -106,7 +106,4 @@ class GalleryPhoto(models.Model):
         return f"{self.title} ({self.get_category_display()})"
     
     def save(self, *args, **kwargs):
-        # Sanitize filename before saving
-        if self.image:
-            self.image.name = sanitize_filename(self.image.name)
         super().save(*args, **kwargs)

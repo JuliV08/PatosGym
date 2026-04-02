@@ -1,0 +1,9 @@
+/* Custom admin styles for GalleryPhoto */
+#result_list .thumbnail_preview img {
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+#result_list td.field-sort_order input {
+    width: 60px;
+}
