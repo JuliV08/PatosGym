@@ -11,8 +11,8 @@
         
         <!-- Animated Filter Tabs -->
         <div class="flex flex-wrap justify-center gap-3 mb-10" data-scroll-reveal>
-            <button class="filter-tab active" data-category="all">Todas</button>
-            <button class="filter-tab" data-category="musculacion">Musculación</button>
+            <button class="filter-tab" data-category="all">Todas</button>
+            <button class="filter-tab active" data-category="musculacion">Musculación</button>
             <button class="filter-tab" data-category="cardio">Cardio</button>
             <button class="filter-tab" data-category="vestuarios">Vestuarios</button>
             <button class="filter-tab" data-category="transformaciones">Transformaciones</button>
@@ -68,7 +68,14 @@
             <script>document.getElementById('gallery-empty-placeholder').style.display = 'flex';</script>
             {% endif %}
         </div>
-
+        <script>
+            // Default to musculacion filter on page load
+            document.querySelectorAll('#gallery-grid .gallery-item').forEach(function(item) {
+                if (item.dataset.category !== 'musculacion') {
+                    item.style.display = 'none';
+                }
+            });
+        </script>
         <!-- View All Button -->
         {% if featured_photos %}
         <div class="text-center mt-12" data-scroll-reveal>
