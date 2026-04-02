@@ -5,8 +5,8 @@ from .models import TeamMember, HeroImage
 
 def home_view(request):
     """Home page view with gallery, team, and hero carousel integration"""
-    # Get featured photos for the landing (exclude athlete profiles)
-    featured_photos = GalleryPhoto.objects.filter(is_active=True).exclude(category='atletas')[:12]
+    # Get all active photos for the landing gallery (JS filters handle display per category)
+    featured_photos = GalleryPhoto.objects.filter(is_active=True)
     
     # Get active team members
     team_members = TeamMember.objects.filter(activo=True)
